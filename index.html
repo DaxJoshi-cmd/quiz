@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     
@@ -12,7 +12,7 @@
         background-color: rgba(0, 0, 0, 0.75); 
         backdrop-filter: blur(4px); 
       }
-      /* Custom scrollbar for the quiz creator */
+      /* Custom scrollbar */
       .custom-scroll::-webkit-scrollbar {
         width: 8px;
       }
@@ -23,8 +23,13 @@
         background: #888; 
         border-radius: 4px;
       }
-      .custom-scroll::-webkit-scrollbar-thumb:hover {
-        background: #555; 
+      /* Hide scrollbar for clean mobile look but keep functionality */
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+      .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
       }
     </style>
     <script>
@@ -44,31 +49,23 @@
   <body class="bg-gray-50 font-sans">
 
     <div id="main-home-screen">
-      <header class="text-gray-600 body-font bg-white shadow-md">
-        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-          <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-            <span class="ml-3 text-2xl font-extrabold text-indigo-700">GARDI QU!Z</span>
+      <header class="text-gray-600 body-font bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex flex-wrap p-4 flex-row items-center justify-between">
+          <a class="flex title-font font-medium items-center text-gray-900">
+            <span class="ml-2 text-xl md:text-2xl font-extrabold text-indigo-700">GARDI QU!Z</span>
           </a>
-          <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-            <span class="bg-indigo-50 border border-indigo-200 text-gray-800 font-semibold py-1 px-4 rounded-full shadow-inner cursor-default">
-              <span class="text-xs md:text-sm font-extrabold text-indigo-800 tracking-tight italic">
-                  <span class="text-indigo-600">PLAY</span>, <span class="text-pink-600">FUN</span> & <span class="text-green-600">LEARN</span>
-              </span>
-            </span>
-          </nav>
-          <button onclick="showScreen('join')" class="inline-flex items-center bg-indigo-600 text-white border-0 py-2 px-6 focus:outline-none hover:bg-indigo-700 rounded-lg text-lg font-semibold transition duration-200 shadow-md">
-            JOIN QUIZ
+          <button onclick="showScreen('join')" class="inline-flex items-center bg-indigo-600 text-white border-0 py-2 px-4 focus:outline-none hover:bg-indigo-700 rounded-lg text-base font-semibold shadow-md">
+            JOIN
           </button>
         </div>
       </header>
      
       <main class="min-h-[calc(100vh-80px)] flex items-center justify-center p-4 bg-gray-50">
         <div class="w-full max-w-lg bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-gray-100">
-            <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-2">Welcome Back!</h2>
-            <p class="text-center text-gray-500 mb-8">Sign in to track your progress or jump right in!</p>
+            <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-2">Welcome!</h2>
+            <p class="text-center text-gray-500 mb-8">Sign in to create & play quizzes.</p>
 
             <div class="space-y-4">
-                
                 <div id="google-signin-button" class="w-full flex justify-center"></div>
 
                 <div class="relative flex items-center justify-center">
@@ -78,87 +75,87 @@
 
                 <form onsubmit="handleAuthFormSubmission(event)">
                     <div class="space-y-4">
-                        <div>
-                            <input id="email" name="email" type="email" required placeholder="Email address" class="appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-lg transition duration-150" />
-                        </div>
-                        <div>
-                            <input id="password" name="password" type="password" required placeholder="Password" class="appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-lg transition duration-150" />
-                        </div>
-                        <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-lg font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none transition duration-300 transform hover:scale-[1.01]">
+                        <input id="email" name="email" type="email" required placeholder="Email address" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition" />
+                        <input id="password" name="password" type="password" required placeholder="Password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition" />
+                        <button type="submit" class="w-full py-3 px-4 rounded-lg shadow-md text-lg font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition">
                             Sign In
                         </button>
                     </div>
                 </form>
             </div>
-           
-            <p class="mt-6 text-center text-sm text-gray-600">
-                Don't have an account? <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">Sign up now</a>
-            </p>
-            <div class="relative flex items-center justify-center mt-6">
-                <div class="w-full border-t border-gray-300"></div>
-                <div class="absolute bg-white px-3 text-sm text-gray-500 font-medium">OR</div>
-            </div>
-            <button onclick="handleGuestLogin()" class="mt-4 w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-lg font-bold text-white bg-pink-500 hover:bg-pink-600 transition duration-300 transform hover:scale-[1.01]">
+            
+            <button onclick="handleGuestLogin()" class="mt-6 w-full py-3 px-4 rounded-lg shadow-md text-lg font-bold text-white bg-pink-500 hover:bg-pink-600 transition">
                 Continue as Guest
             </button>
         </div>
       </main>
     </div>
 
-    <div id="dashboard-screen" class="min-h-screen bg-gray-100 hidden">
-        <div class="flex flex-col h-screen">
-            <header class="bg-white shadow-lg p-4 flex justify-between items-center z-10">
-                <h1 class="text-3xl font-extrabold text-indigo-700">GARDI DASHBOARD</h1>
-                <div class="flex items-center space-x-4">
-                    <img id="user-profile-pic" src="" class="w-8 h-8 rounded-full hidden border border-gray-300">
-                    <span id="welcome-message" class="text-gray-600 font-medium">Welcome!</span>
-                    <button onclick="showScreen('home')" class="text-sm text-red-500 hover:text-red-700 font-semibold">Logout</button>
-                </div>
-            </header>
-            <div class="flex flex-1 overflow-hidden">
-                <nav class="w-64 bg-white shadow-md p-4 space-y-2 hidden md:block z-0">
-                    <div class="mb-6">
-                        <button onclick="showCreateQuizModal()" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold hover:bg-indigo-700 transition">+ Create Quiz</button>
-                    </div>
-                    <h3 class="text-xs font-semibold uppercase text-gray-400 mb-2">Menu</h3>
-                    <a href="#" class="block p-3 rounded-lg text-gray-700 bg-gray-100 font-semibold">My Library</a>
-                    <a href="#" class="block p-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">Reports</a>
-                    <a href="#" class="block p-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">Settings</a>
-                </nav>
-                
-                <main class="flex-1 p-6 overflow-y-auto">
-                    <div id="dashboard-content" class="text-center mt-10">
-                        <h2 class="text-2xl font-bold text-gray-700 mb-4">Your Quiz Library</h2>
-                        <div class="p-10 border-4 border-dashed border-gray-300 rounded-xl bg-white text-gray-400">
-                            <p>No quizzes created yet. Click "Create Quiz" to start!</p>
-                        </div>
-                    </div>
-                </main>
+    <div id="dashboard-screen" class="min-h-screen bg-gray-100 hidden flex flex-col">
+        <header class="bg-white shadow-md p-4 flex justify-between items-center z-10 sticky top-0">
+            <h1 class="text-xl md:text-3xl font-extrabold text-indigo-700 truncate">DASHBOARD</h1>
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <img id="user-profile-pic" src="" class="w-8 h-8 rounded-full hidden border border-gray-300">
+                <span id="welcome-message" class="text-gray-600 font-medium text-sm md:text-base truncate max-w-[100px] md:max-w-none">Welcome!</span>
+                <button onclick="showScreen('home')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">Logout</button>
             </div>
+        </header>
+
+        <div class="flex flex-1 overflow-hidden relative">
+            <nav class="w-64 bg-white shadow-md p-4 space-y-2 hidden md:block z-0 h-full">
+                <div class="mb-6">
+                    <button onclick="showCreateQuizModal()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition shadow-md">+ Create Quiz</button>
+                </div>
+                <h3 class="text-xs font-semibold uppercase text-gray-400 mb-2">Menu</h3>
+                <a href="#" class="block p-3 rounded-lg text-gray-700 bg-gray-100 font-semibold">My Library</a>
+                <a href="#" class="block p-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">Reports</a>
+            </nav>
+            
+            <main class="flex-1 p-4 md:p-6 overflow-y-auto pb-24 md:pb-6">
+                
+                <div class="md:hidden mb-6">
+                    <button onclick="showCreateQuizModal()" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold shadow-lg flex items-center justify-center space-x-2">
+                        <span class="text-2xl">+</span> <span>Create New Quiz</span>
+                    </button>
+                </div>
+
+                <div id="dashboard-content" class="text-center mt-4 md:mt-10">
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-4">Your Quiz Library</h2>
+                    <div id="empty-state" class="p-8 md:p-10 border-4 border-dashed border-gray-300 rounded-xl bg-white text-gray-400 flex flex-col items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        <p>No quizzes yet.</p> 
+                        <p class="text-sm">Tap the button above to create one!</p>
+                    </div>
+                    <div id="quiz-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 hidden">
+                        </div>
+                </div>
+            </main>
         </div>
     </div>
 
     <div id="create-quiz-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay">
-        <div class="w-full max-w-6xl h-[90vh] bg-gray-50 rounded-2xl shadow-2xl flex flex-col overflow-hidden m-4" id="create-modal-content">
+        <div class="w-full md:max-w-6xl h-full md:h-[90vh] bg-gray-50 md:rounded-2xl shadow-2xl flex flex-col overflow-hidden md:m-4 transition-all" id="create-modal-content">
              
-             <div class="bg-white px-6 py-4 border-b flex justify-between items-center">
-                 <div class="flex-1">
-                     <input type="text" id="quiz-title-input" placeholder="Enter Quiz Title..." class="text-2xl font-extrabold text-gray-800 placeholder-gray-400 border-none focus:ring-0 w-full bg-transparent">
+             <div class="bg-white px-4 py-3 md:px-6 md:py-4 border-b flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 shadow-sm z-20">
+                 <div class="flex-1 w-full sm:w-auto">
+                     <input type="text" id="quiz-title-input" placeholder="Enter Quiz Title..." class="text-xl md:text-2xl font-extrabold text-gray-800 placeholder-gray-400 border-none focus:ring-0 w-full bg-transparent p-0">
                  </div>
-                 <div class="flex space-x-3">
-                     <button onclick="hideCreateQuizModal()" class="py-2 px-4 text-gray-600 hover:bg-gray-100 rounded-lg font-medium">Cancel</button>
-                     <button onclick="saveQuiz()" class="py-2 px-6 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 shadow-md">Save Quiz</button>
+                 <div class="flex space-x-3 w-full sm:w-auto justify-end">
+                     <button onclick="hideCreateQuizModal()" class="flex-1 sm:flex-none py-2 px-4 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium text-sm">Cancel</button>
+                     <button onclick="saveQuiz()" class="flex-1 sm:flex-none py-2 px-6 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 shadow-md text-sm">Save</button>
                  </div>
              </div>
 
-             <div class="flex flex-1 overflow-hidden">
-                <div class="flex-1 p-6 overflow-y-auto custom-scroll bg-gray-100 relative">
+             <div class="flex flex-1 overflow-hidden relative">
+                <div class="flex-1 p-4 md:p-6 overflow-y-auto custom-scroll bg-gray-100 relative w-full">
                     
-                    <div id="questions-container" class="space-y-6 pb-20">
+                    <div id="questions-container" class="space-y-4 md:space-y-6 pb-28 md:pb-20 max-w-5xl mx-auto">
                         </div>
 
-                    <div class="fixed bottom-10 right-10 md:absolute md:bottom-8 md:right-8">
-                        <button onclick="addQuestionCard()" class="flex items-center justify-center w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 hover:scale-110 transition transform">
+                    <div class="fixed bottom-6 right-6 md:absolute md:bottom-8 md:right-8 z-30">
+                        <button onclick="addQuestionCard()" class="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 active:scale-95 transition transform border-2 border-white">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>
@@ -169,9 +166,13 @@
         </div>
     </div>
 
-    <div id="join-quiz-screen" class="hidden min-h-screen flex flex-col items-center justify-center bg-gray-100">
-         <h2 class="text-3xl font-bold">Join Screen</h2>
-         <button onclick="showScreen('home')" class="mt-4 text-indigo-600">Back</button>
+    <div id="join-quiz-screen" class="hidden min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+         <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md text-center">
+             <h2 class="text-3xl font-bold mb-6 text-indigo-700">Join Quiz</h2>
+             <input type="text" placeholder="Enter Game PIN" class="w-full text-center text-2xl tracking-widest border-2 border-gray-300 rounded-lg py-3 mb-4 focus:border-indigo-600 focus:outline-none font-bold uppercase">
+             <button class="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg text-lg hover:bg-indigo-700 transition mb-4">Enter</button>
+             <button onclick="showScreen('home')" class="text-gray-500 hover:text-gray-800 text-sm">Back to Home</button>
+         </div>
     </div>
 
     <script>
@@ -211,7 +212,7 @@
                 });
                 google.accounts.id.renderButton(
                     document.getElementById("google-signin-button"),
-                    { theme: "outline", size: "large", width: "400", text: "sign_in_with" }
+                    { theme: "outline", size: "large", width: "100%", text: "sign_in_with" }
                 );
             }
         };
@@ -263,7 +264,7 @@
             showScreen('dashboard');
         }
 
-        // --- NEW QUIZ CREATOR LOGIC ---
+        // --- QUIZ CREATOR LOGIC ---
 
         function showCreateQuizModal() {
             document.getElementById('create-quiz-modal').classList.remove('hidden');
@@ -277,13 +278,12 @@
         function hideCreateQuizModal() {
             if(confirm("Are you sure? Unsaved changes will be lost.")) {
                 document.getElementById('create-quiz-modal').classList.add('hidden');
-                document.getElementById('questions-container').innerHTML = ''; // Clear
+                document.getElementById('questions-container').innerHTML = ''; 
                 document.getElementById('quiz-title-input').value = '';
                 questionCount = 0;
             }
         }
 
-        // THIS IS THE "CANVAS" GENERATOR
         function addQuestionCard() {
             questionCount++;
             const container = document.getElementById('questions-container');
@@ -291,36 +291,36 @@
             const cardId = `q-card-${questionCount}`;
             
             const html = `
-                <div id="${cardId}" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 transition hover:shadow-md">
-                    <div class="flex justify-between items-start mb-4">
+                <div id="${cardId}" class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 transition hover:shadow-md">
+                    <div class="flex justify-between items-start mb-3">
                         <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Question ${questionCount}</span>
-                        <button onclick="removeQuestion('${cardId}')" class="text-red-400 hover:text-red-600">
+                        <button onclick="removeQuestion('${cardId}')" class="text-red-400 hover:text-red-600 p-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                               <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                             </svg>
                         </button>
                     </div>
                     
-                    <div class="mb-6">
-                        <input type="text" class="w-full text-lg font-medium border-b-2 border-gray-200 focus:border-indigo-500 outline-none py-2 transition" placeholder="Type your question here...">
+                    <div class="mb-5">
+                        <input type="text" class="w-full text-base md:text-lg font-medium border-b-2 border-gray-200 focus:border-indigo-500 outline-none py-2 transition bg-transparent" placeholder="Type your question here...">
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="flex items-center bg-red-50 p-2 rounded-lg border border-transparent focus-within:border-red-500">
-                            <input type="radio" name="correct-${questionCount}" class="w-4 h-4 text-red-600 mt-1 cursor-pointer">
-                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700" placeholder="Answer 1 (Red)">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="flex items-center bg-red-50 p-2 rounded-lg border border-transparent focus-within:border-red-500 transition">
+                            <input type="radio" name="correct-${questionCount}" class="w-5 h-5 text-red-600 shrink-0">
+                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700 py-1" placeholder="Answer 1">
                         </div>
-                        <div class="flex items-center bg-blue-50 p-2 rounded-lg border border-transparent focus-within:border-blue-500">
-                            <input type="radio" name="correct-${questionCount}" class="w-4 h-4 text-blue-600 mt-1 cursor-pointer">
-                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700" placeholder="Answer 2 (Blue)">
+                        <div class="flex items-center bg-blue-50 p-2 rounded-lg border border-transparent focus-within:border-blue-500 transition">
+                            <input type="radio" name="correct-${questionCount}" class="w-5 h-5 text-blue-600 shrink-0">
+                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700 py-1" placeholder="Answer 2">
                         </div>
-                        <div class="flex items-center bg-yellow-50 p-2 rounded-lg border border-transparent focus-within:border-yellow-500">
-                            <input type="radio" name="correct-${questionCount}" class="w-4 h-4 text-yellow-600 mt-1 cursor-pointer">
-                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700" placeholder="Answer 3 (Yellow)">
+                        <div class="flex items-center bg-yellow-50 p-2 rounded-lg border border-transparent focus-within:border-yellow-500 transition">
+                            <input type="radio" name="correct-${questionCount}" class="w-5 h-5 text-yellow-600 shrink-0">
+                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700 py-1" placeholder="Answer 3">
                         </div>
-                        <div class="flex items-center bg-green-50 p-2 rounded-lg border border-transparent focus-within:border-green-500">
-                            <input type="radio" name="correct-${questionCount}" class="w-4 h-4 text-green-600 mt-1 cursor-pointer">
-                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700" placeholder="Answer 4 (Green)">
+                        <div class="flex items-center bg-green-50 p-2 rounded-lg border border-transparent focus-within:border-green-500 transition">
+                            <input type="radio" name="correct-${questionCount}" class="w-5 h-5 text-green-600 shrink-0">
+                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700 py-1" placeholder="Answer 4">
                         </div>
                     </div>
                 </div>
@@ -328,18 +328,21 @@
 
             const div = document.createElement('div');
             div.innerHTML = html;
-            // Append the content, not the wrapper div, to avoid double nesting issues if preferred, 
-            // but appending the div is cleaner for removal:
             container.appendChild(div.firstElementChild);
             
-            // Scroll to bottom
-            container.scrollTop = container.scrollHeight;
+            // Smooth scroll to the new card
+            setTimeout(() => {
+                const newCard = document.getElementById(cardId);
+                newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
         }
 
         function removeQuestion(id) {
             const el = document.getElementById(id);
             if(el) {
-                el.remove();
+                // Animate out (simple)
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 200);
             }
         }
 
@@ -350,25 +353,39 @@
                 return;
             }
 
-            // Here you would gather data from the DOM
-            // For now, we just simulate a save
-            alert(`Quiz "${title}" saved successfully! (This is a prototype)`);
-            
             // Close modal
             document.getElementById('create-quiz-modal').classList.add('hidden');
             
-            // Show placeholder in dashboard
-            const dbContent = document.getElementById('dashboard-content');
-            dbContent.innerHTML = `
-                <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <h3 class="font-bold text-xl text-indigo-700">${title}</h3>
-                    <p class="text-gray-500 text-sm mt-1">${document.getElementById('questions-container').children.length} Questions</p>
-                    <div class="mt-4 flex space-x-2">
-                        <button class="bg-indigo-600 text-white px-4 py-1 rounded text-sm">Play</button>
-                        <button class="bg-gray-200 text-gray-700 px-4 py-1 rounded text-sm">Edit</button>
+            // Update Dashboard UI
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('quiz-grid').classList.remove('hidden');
+            
+            const grid = document.getElementById('quiz-grid');
+            const qCount = document.getElementById('questions-container').children.length;
+            
+            const cardHTML = `
+                <div class="bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition">
+                    <div class="h-32 bg-indigo-100 rounded-lg mb-4 flex items-center justify-center">
+                        <span class="text-4xl">🎓</span>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 truncate">${title}</h3>
+                    <p class="text-gray-500 text-sm mb-4">${qCount} Questions</p>
+                    <div class="flex space-x-2">
+                        <button class="flex-1 bg-indigo-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700">Play</button>
+                        <button class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg text-sm font-semibold hover:bg-gray-200">Edit</button>
                     </div>
                 </div>
             `;
+            
+            // Prepend new quiz
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = cardHTML;
+            grid.insertBefore(wrapper.firstElementChild, grid.firstChild);
+            
+            // Reset for next time
+            document.getElementById('questions-container').innerHTML = '';
+            document.getElementById('quiz-title-input').value = '';
+            questionCount = 0;
         }
 
     </script>
