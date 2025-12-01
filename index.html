@@ -4,32 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
     <style>
-      /* Custom CSS for modal overlay */
       .modal-overlay {
-        background-color: rgba(0, 0, 0, 0.75); /* Darker backdrop */
-        backdrop-filter: blur(4px); /* Slight blur effect */
+        background-color: rgba(0, 0, 0, 0.75); 
+        backdrop-filter: blur(4px); 
       }
-      /* Custom utility for the grid layout of the cards (Now 3 columns) */
-      .quiz-card-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 1rem;
+      .custom-scroll::-webkit-scrollbar {
+        width: 8px;
+      }
+      .custom-scroll::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+      }
+      .custom-scroll::-webkit-scrollbar-thumb {
+        background: #888; 
+        border-radius: 4px;
       }
     </style>
     <script>
-      // Configure Tailwind to use a modern font
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-            },
+            fontFamily: { sans: ['Inter', 'sans-serif'] },
             colors: {
-                kahoot: {
-                    'main': '#341d5b', // Dark Purple
-                    'accent': '#9b47ff', // Lighter Purple for accents
-                }
+                kahoot: { 'main': '#341d5b', 'accent': '#9b47ff' }
             }
           }
         }
@@ -40,33 +39,20 @@
   <body class="bg-gray-50 font-sans">
 
     <div id="main-home-screen">
-     
       <header class="text-gray-600 body-font bg-white shadow-md">
         <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
           <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-            <div class="w-10 h-10 flex items-center justify-center">
-                </div>
-           
             <span class="ml-3 text-2xl font-extrabold text-indigo-700">GARDI QU!Z</span>
           </a>
-         
           <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-            <span class="bg-indigo-50 border border-indigo-200 text-gray-800 font-semibold py-1 px-4 rounded-full shadow-inner transition duration-300 transform hover:scale-[1.05] cursor-default">
+            <span class="bg-indigo-50 border border-indigo-200 text-gray-800 font-semibold py-1 px-4 rounded-full shadow-inner cursor-default">
               <span class="text-xs md:text-sm font-extrabold text-indigo-800 tracking-tight italic">
-                  <span class="text-indigo-600">PLAY</span>,
-                  <span class="text-pink-600">FUN</span> &
-                  <span class="text-green-600">LEARN</span>
+                  <span class="text-indigo-600">PLAY</span>, <span class="text-pink-600">FUN</span> & <span class="text-green-600">LEARN</span>
               </span>
             </span>
           </nav>
-         
-         
-         
-          <button onclick="showScreen('join')" class="inline-flex items-center bg-indigo-600 text-white border-0 py-2 px-6 focus:outline-none hover:bg-indigo-700 rounded-lg text-lg font-semibold transition duration-200 shadow-md transform hover:scale-[1.02] shadow-indigo-500/50">
+          <button onclick="showScreen('join')" class="inline-flex items-center bg-indigo-600 text-white border-0 py-2 px-6 focus:outline-none hover:bg-indigo-700 rounded-lg text-lg font-semibold transition duration-200 shadow-md">
             JOIN QUIZ
-            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
           </button>
         </div>
       </header>
@@ -77,71 +63,20 @@
             <p class="text-center text-gray-500 mb-8">Sign in to track your progress or jump right in!</p>
 
             <div class="space-y-4">
-               
-                <button
-                    onclick="handleGoogleSignIn()"
-                    class="w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 transition duration-150 transform hover:scale-[1.01]"
-                >
-                    <svg class="w-5 h-5 mr-3" viewBox="0 0 48 48">
-                        <path fill="#FFC107" d="M43.6 20.4H24v7.5h10.4c-.4 2-1.6 3.7-3.5 4.9v4.9h6.3c3.7-3.4 5.8-8.5 5.8-15.1 0-1.6-.1-3.2-.4-4.7z"></path>
-                        <path fill="#FF3D00" d="M24 43.6c5.2 0 9.7-1.7 12.9-4.7l-6.3-4.9c-1.7 1.1-3.9 1.7-6.6 1.7-5.1 0-9.4-3.4-10.9-8l-6.3 4.9c3.2 5.8 9.5 9.7 17.9 9.7z"></path>
-                        <path fill="#4CAF50" d="M13.1 29.5c-.3-1.1-.5-2.2-.5-3.5s.2-2.4.5-3.5v-4.9l-6.3-4.9c-1 2.2-1.6 4.7-1.6 7.8s.6 5.6 1.6 7.8l6.3-4.9z"></path>
-                        <path fill="#1976D2" d="M24 13.1c3.1 0 5.9 1.1 8.1 3.1l5.3-5.3c-3.7-3.4-8.5-5.5-13.4-5.5-8.4 0-14.7 3.9-17.9 9.7l6.3 4.9c1.5-4.6 5.8-8 10.9-8z"></path>
-                    </svg>
-                    Sign in with Google
-                </button>
-
+                <div id="google-signin-button" class="w-full flex justify-center"></div>
                 <div class="relative flex items-center justify-center">
                     <div class="w-full border-t border-gray-300"></div>
-                    <div class="absolute bg-white px-3 text-sm text-gray-500 font-medium">
-                        OR
-                    </div>
+                    <div class="absolute bg-white px-3 text-sm text-gray-500 font-medium">OR</div>
                 </div>
-
                 <form onsubmit="handleAuthFormSubmission(event)">
                     <div class="space-y-4">
                         <div>
-                            <label for="email" class="sr-only">Email address</label>
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                autocomplete="email"
-                                required
-                                placeholder="Email address"
-                                class="appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-lg transition duration-150"
-                            />
+                            <input id="email" name="email" type="email" required placeholder="Email address" class="appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-lg transition duration-150" />
                         </div>
                         <div>
-                            <label for="password" class="sr-only">Password</label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autocomplete="current-password"
-                                required
-                                placeholder="Password"
-                                class="appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-lg transition duration-150"
-                            />
+                            <input id="password" name="password" type="password" required placeholder="Password" class="appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-lg transition duration-150" />
                         </div>
-
-                        <div class="flex items-center justify-between text-sm">
-                            <div class="flex items-center">
-                                <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                                <label for="remember-me" class="ml-2 block text-gray-900 font-medium"> Remember me </label>
-                            </div>
-
-                            <div class="text-sm">
-                                <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
-                                    Forgot your password?
-                                </a>
-                            </div>
-                        </div>
-
-                        <button
-                            type="submit"
-                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-lg font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 transform hover:scale-[1.01]"
-                        >
+                        <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-lg font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none transition duration-300 transform hover:scale-[1.01]">
                             Sign In
                         </button>
                     </div>
@@ -149,288 +84,151 @@
             </div>
            
             <p class="mt-6 text-center text-sm text-gray-600">
-                Don't have an account?
-                <a href="#" onclick="alert('This would navigate to a Sign Up form.')" class="font-medium text-indigo-600 hover:text-indigo-500 transition duration-150">
-                    Sign up now
-                </a>
+                Don't have an account? <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">Sign up now</a>
             </p>
-
             <div class="relative flex items-center justify-center mt-6">
                 <div class="w-full border-t border-gray-300"></div>
-                <div class="absolute bg-white px-3 text-sm text-gray-500 font-medium">
-                    OR
-                </div>
+                <div class="absolute bg-white px-3 text-sm text-gray-500 font-medium">OR</div>
             </div>
-
-            <button
-                onclick="handleGuestLogin()"
-                class="mt-4 w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-lg font-bold text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-400 transition duration-300 transform hover:scale-[1.01]"
-            >
+            <button onclick="handleGuestLogin()" class="mt-4 w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-lg font-bold text-white bg-pink-500 hover:bg-pink-600 transition duration-300 transform hover:scale-[1.01]">
                 Continue as Guest
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 ml-2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                </svg>
             </button>
-
-
         </div>
       </main>
-      </div>
+    </div>
 
     <div id="dashboard-screen" class="min-h-screen bg-gray-100 hidden">
         <div class="flex flex-col h-screen">
-            <header class="bg-white shadow-lg p-4 flex justify-between items-center">
-                <h1 class="text-3xl font-extrabold text-indigo-700">GARDI DASHBOARD</h1>
-                <div class="flex items-center space-x-4">
-                    <span id="welcome-message" class="text-gray-600 font-medium">Welcome!</span>
-                    <button onclick="showScreen('home')" class="text-sm text-red-500 hover:text-red-700 font-semibold">Logout</button>
+            <header class="bg-white shadow-lg p-4 flex justify-between items-center z-10 sticky top-0">
+                <div class="flex items-center gap-2">
+                    <h1 class="text-xl md:text-3xl font-extrabold text-indigo-700 truncate">GARDI</h1>
+                    <button onclick="showCreateQuizModal()" class="md:hidden bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 shadow-sm flex items-center">
+                        <span class="font-bold text-sm">+ Quiz</span>
+                    </button>
+                </div>
+                
+                <div class="flex items-center space-x-2 md:space-x-4">
+                    <img id="user-profile-pic" src="" class="w-8 h-8 rounded-full hidden border border-gray-300">
+                    <span id="welcome-message" class="text-gray-600 font-medium text-sm md:text-base">Welcome!</span>
+                    <button onclick="showScreen('home')" class="text-sm text-red-500 hover:text-red-700 font-semibold border border-red-200 px-2 py-1 rounded">Logout</button>
                 </div>
             </header>
-           
-            <div class="flex flex-1 overflow-hidden">
-                <nav class="w-64 bg-white shadow-md p-4 space-y-2 hidden md:block">
-                    <h3 class="text-xs font-semibold uppercase text-gray-400 mb-2">Quiz Management</h3>
-                   
-                   
-                    </a>
-                   
-                 
-                    </a>
-                   
-                   
-                    </a>
-                   
-                    <div class="h-px bg-gray-200 my-2"></div>
-                   
-                    <a href="#" onclick="setDashboardContent('leaderboard')" id="nav-leaderboard" class="block p-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">Leaderboard</a>
-                    <a href="#" onclick="setDashboardContent('settings')" id="nav-settings" class="block p-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">Settings</a>
-                </nav>
-               
-                <main class="flex-1 p-6 overflow-y-auto">
-                   
-                    <div class="border-b border-gray-200">
-                        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                            <a href="#" onclick="setDashboardContent('create')" id="tab-create" class="border-indigo-500 text-indigo-600 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-lg">Create Quiz</a>
-                            <a href="#" onclick="setDashboardContent('edit')" id="tab-edit" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-lg">Edit/Manage</a>
-                            <a href="#" onclick="setDashboardContent('run')" id="tab-run" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-lg">Run Game</a>
-                        </nav>
-                    </div>
 
-                    <div id="dashboard-content" class="mt-8 p-10 border-4 border-dashed border-gray-300 rounded-xl bg-white text-center text-gray-500">
-                       
-                        <h3 class="text-3xl font-bold text-indigo-700">Start Creating!</h3>
-                        <p class="mt-4 text-lg">Use the menu on the left or the tabs above to manage your quizzes.</p>
-                       
-                        <div class="mt-8 flex justify-center space-x-6">
-                            <div onclick="showCreateQuizModal()" class="cursor-pointer p-6 w-52 bg-green-50 border-2 border-green-300 rounded-xl shadow-lg hover:shadow-xl transition duration-200 transform hover:scale-[1.03]">
-                                <p class="text-4xl">➕</p>
-                                <p class="mt-3 text-lg font-semibold text-green-700">New Quiz</p>
-                            </div>
-                            <div onclick="setDashboardContent('run')" class="cursor-pointer p-6 w-52 bg-blue-50 border-2 border-blue-300 rounded-xl shadow-lg hover:shadow-xl transition duration-200 transform hover:scale-[1.03]">
-                                <p class="text-4xl">▶️</p>
-                                <p class="mt-3 text-lg font-semibold text-blue-700">Start Live Game</p>
-                            </div>
+            <div class="flex flex-1 overflow-hidden">
+                <nav class="w-64 bg-white shadow-md p-4 space-y-2 hidden md:block z-0">
+                    <div class="mb-6">
+                        <button onclick="showCreateQuizModal()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition shadow-md">+ Create Quiz</button>
+                    </div>
+                    <h3 class="text-xs font-semibold uppercase text-gray-400 mb-2">Menu</h3>
+                    <a href="#" class="block p-3 rounded-lg text-gray-700 bg-gray-100 font-semibold">My Library</a>
+                    <a href="#" class="block p-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">Reports</a>
+                    <a href="#" class="block p-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">Settings</a>
+                </nav>
+                
+                <main class="flex-1 p-4 md:p-6 overflow-y-auto">
+                    <div id="dashboard-content" class="text-center mt-6 md:mt-10">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-4">Your Quiz Library</h2>
+                        
+                        <div class="p-8 md:p-10 border-4 border-dashed border-gray-300 rounded-xl bg-white text-gray-400 flex flex-col items-center justify-center gap-4">
+                            <p>No quizzes created yet.</p>
+                            <button onclick="showCreateQuizModal()" class="bg-indigo-600 text-white py-2 px-6 rounded-lg font-bold hover:bg-indigo-700 transition shadow-md">
+                                Start Creating
+                            </button>
                         </div>
 
                     </div>
-                   
                 </main>
             </div>
         </div>
     </div>
-    <div id="create-quiz-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
-       
-        <div class="w-full max-w-3xl bg-gray-50 p-6 rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="create-modal-content">
-           
-            <h2 class="text-2xl font-extrabold text-gray-900 text-center mb-6">Choose how you want to create your quiz</h2>
 
-            <div class="quiz-card-grid">
-               
-                <div onclick="startFromPDF()" class="relative p-6 bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition duration-200 cursor-pointer overflow-hidden">
-                    <div class="absolute top-2 right-2 flex items-center bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
-                        New! <span class="ml-1 text-yellow-300">★</span>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="w-20 h-20 flex items-center justify-center bg-kahoot-main rounded-xl shadow-md mb-4">
-                             <svg xmlns="http://www.w3.org/2300/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-white">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625c0-1.036-.84-1.875-1.875-1.875h-8.25c-1.036 0-1.875.84-1.875 1.875v2.625m10.5-2.625a1.5 1.5 0 0 1 1.5 1.5v4.5a1.5 1.5 0 0 1-1.5 1.5h-10.5a1.5 1.5 0 0 1-1.5-1.5V13.5m12 0a1.5 1.5 0 0 0-1.5-1.5h-10.5a1.5 1.5 0 0 0-1.5 1.5m10.5 0H12" />
-                            </svg>
+    <div id="create-quiz-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-2 md:p-4">
+        <div class="w-full max-w-6xl h-[95vh] md:h-[90vh] bg-gray-50 rounded-xl md:rounded-2xl shadow-2xl flex flex-col overflow-hidden" id="create-modal-content">
+             
+             <div class="bg-white px-4 py-3 md:px-6 md:py-4 border-b flex justify-between items-center gap-2">
+                 <div class="flex-1">
+                     <input type="text" id="quiz-title-input" placeholder="Quiz Title..." class="text-xl md:text-2xl font-extrabold text-gray-800 placeholder-gray-400 border-none focus:ring-0 w-full bg-transparent">
+                 </div>
+                 <div class="flex space-x-2">
+                     <button onclick="hideCreateQuizModal()" class="py-1 px-3 md:py-2 md:px-4 text-gray-600 hover:bg-gray-100 rounded-lg font-medium text-sm md:text-base">Cancel</button>
+                     <button onclick="saveQuiz()" class="py-1 px-3 md:py-2 md:px-6 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 shadow-md text-sm md:text-base">Save</button>
+                 </div>
+             </div>
+
+             <div class="flex flex-1 overflow-hidden relative">
+                <div class="flex-1 p-4 md:p-6 overflow-y-auto custom-scroll bg-gray-100">
+                    <div id="questions-container" class="space-y-4 md:space-y-6 pb-24 md:pb-20">
                         </div>
-                        <p class="text-xl font-semibold text-gray-900 text-center">PDF to Quiz</p>
-                        <p class="text-sm text-gray-500 mt-2 text-center h-12">Generate or extract questions from your PDF document.</p>
-                        <button class="mt-4 text-xs font-medium text-kahoot-main flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1 text-pink-500">
-                                <path fill-rule="evenodd" d="M9.293 2.293a1 1 0 0 1 1.414 0l6 6a1 1 0 0 1 0 1.414l-6 6a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 1 1 0-2h11.586l-5.293-5.293a1 1 0 0 1 0-1.414Z" clip-rule="evenodd" />
-                            </svg>
-                            AI assisted
-                        </button>
-                    </div>
                 </div>
 
-                <div onclick="startWithAIGenerator()" class="p-6 bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition duration-200 cursor-pointer">
-                    <div class="flex flex-col items-center">
-                        <div class="w-20 h-20 flex items-center justify-center bg-kahoot-main rounded-xl shadow-md mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-white">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 18.07a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.862 4.487zm0 0l1.687-1.688M12 21a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <p class="text-xl font-semibold text-gray-900 text-center">AI Quiz Generator</p>
-                        <p class="text-sm text-gray-500 mt-2 text-center h-12">Generate a quiz based on a topic, URL, or Wikipedia article.</p>
-                        <button class="mt-4 text-xs font-medium text-kahoot-main flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1 text-pink-500">
-                                <path fill-rule="evenodd" d="M9.293 2.293a1 1 0 0 1 1.414 0l6 6a1 1 0 0 1 0 1.414l-6 6a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 1 1 0-2h11.586l-5.293-5.293a1 1 0 0 1 0-1.414Z" clip-rule="evenodd" />
-                            </svg>
-                            AI assisted
-                        </button>
-                    </div>
+                <div class="absolute bottom-6 right-6 md:bottom-8 md:right-8 z-10">
+                    <button onclick="addQuestionCard()" class="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 hover:scale-110 transition transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </button>
                 </div>
-
-                <div onclick="startBlank()" class="p-6 bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition duration-200 cursor-pointer">
-                    <div class="flex flex-col items-center">
-                        <div class="w-20 h-20 flex items-center justify-center bg-gray-100 border-2 border-gray-300 rounded-xl shadow-md mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-500">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                            </svg>
-                        </div>
-                        <p class="text-xl font-semibold text-gray-900 text-center">Blank Canvas</p>
-                        <p class="text-sm text-gray-500 mt-2 text-center h-12">Create your quiz from scratch, adding questions one by one.</p>
-                        <button class="mt-4 text-xs font-medium text-white flex items-center invisible">
-                            &nbsp;
-                        </button>
-                    </div>
-                </div>
-            </div>
-           
-            <button onclick="hideCreateQuizModal()" class="mt-8 mx-auto block py-2 px-8 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition duration-150">
-                Close
-            </button>
-        </div>
-    </div>
-    <div id="join-quiz-screen" class="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-100 hidden">
-        <div class="w-full max-w-md bg-white p-8 sm:p-12 rounded-2xl shadow-2xl transition duration-300 transform hover:-translate-y-1">
-          <h2 class="text-4xl font-extrabold text-indigo-700 text-center mb-8">JOIN QUIZ</h2>
-
-          <form onsubmit="handleGamePinSubmission(event)" class="space-y-6">
-            <div>
-                <label for="game-pin" class="block text-lg font-medium text-gray-700 text-center mb-4">Enter Game Pin (6 Digits)</label>
-                <input
-                    type="text"
-                    id="game-pin"
-                    maxlength="6"
-                    placeholder="______"
-                    class="mt-1 block w-full px-4 py-4 text-3xl text-center font-mono tracking-[0.4em] uppercase border-4 border-indigo-300 rounded-xl shadow-inner focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
-                    oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6)"
-                    required
-                />
-            </div>
-
-            <button
-                type="submit"
-                class="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-lg text-xl font-bold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-300 transform hover:scale-[1.02]"
-            >
-                Enter
-            </button>
-          </form>
-
-          <button onclick="showScreen('home')" class="mt-8 w-full text-center text-indigo-500 hover:text-indigo-700 transition duration-300 text-sm font-medium">
-              &larr; Go back to Home
-          </button>
+             </div>
         </div>
     </div>
 
-
-    <div id="nickname-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
-       
-        <div class="w-full max-w-lg bg-white p-8 rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
-            <h2 class="text-3xl font-extrabold text-indigo-700 text-center mb-6">Choose Your Identity!</h2>
-
-            <form class="space-y-6">
-                <div>
-                    <label for="nickname" class="block text-xl font-bold text-gray-700 mb-3 text-center">Your Nickname</label>
-                    <input
-                        type="text"
-                        id="nickname"
-                        placeholder="e.g., QuizMaster24"
-                        maxlength="15"
-                        class="mt-1 block w-full px-4 py-3 text-2xl text-center font-medium border-4 border-pink-300 rounded-xl shadow-inner focus:ring-pink-500 focus:border-pink-500 transition duration-200"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label class="block text-xl font-bold text-gray-700 mb-3 text-center">Select Your Avatar</label>
-                    <div class="flex justify-center space-x-4">
-                        <div onclick="selectAvatar(1)" id="avatar-1" class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-200 rounded-full border-4 border-transparent cursor-pointer hover:border-indigo-400 transition duration-150 flex items-center justify-center text-3xl shadow-md">
-                            😎
-                        </div>
-                        <div onclick="selectAvatar(2)" id="avatar-2" class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-200 rounded-full border-4 border-transparent cursor-pointer hover:border-indigo-400 transition duration-150 flex items-center justify-center text-3xl shadow-md">
-                            🚀
-                        </div>
-                        <div onclick="selectAvatar(3)" id="avatar-3" class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-200 rounded-full border-4 border-transparent cursor-pointer hover:border-indigo-400 transition duration-150 flex items-center justify-center text-3xl shadow-md">
-                            🤖
-                        </div>
-                        <div onclick="selectAvatar(4)" id="avatar-4" class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-200 rounded-full border-4 border-transparent cursor-pointer hover:border-indigo-400 transition duration-150 flex items-center justify-center text-3xl shadow-md">
-                            👑
-                        </div>
-                    </div>
-                    <input type="hidden" id="selected-avatar" value="" required>
-                    <p id="avatar-error" class="text-red-500 text-center text-sm mt-2 hidden">Please select an avatar.</p>
-                </div>
-
-                <button
-                    type="submit"
-                    class="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-lg text-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 transform hover:scale-[1.02]"
-                >
-                    LET'S GO!
-                </button>
-            </form>
-        </div>
+    <div id="join-quiz-screen" class="hidden min-h-screen flex flex-col items-center justify-center bg-gray-100">
+         <h2 class="text-3xl font-bold">Join Screen</h2>
+         <button onclick="showScreen('home')" class="mt-4 text-indigo-600">Back</button>
     </div>
-
 
     <script>
-        // Global state for current user/guest
+        const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID_HERE.apps.googleusercontent.com"; 
+
         let userName = 'Guest';
-        let currentAvatar = null;
-        let activeTab = 'create_placeholder'; // Use placeholder to show initial dashboard view
+        let userPicture = '';
+        let questionCount = 0;
 
-        // Helper functions for content management
+        // AUTH & NAVIGATION
+        function parseJwt (token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        function handleCredentialResponse(response) {
+            try {
+                const responsePayload = parseJwt(response.credential);
+                userName = responsePayload.given_name || responsePayload.name;
+                userPicture = responsePayload.picture;
+                showScreen('dashboard');
+            } catch (e) {
+                console.error("Error decoding JWT", e);
+            }
+        }
+
+        window.onload = function () {
+            if (typeof google !== 'undefined') {
+                google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: handleCredentialResponse
+                });
+                google.accounts.id.renderButton(
+                    document.getElementById("google-signin-button"),
+                    { theme: "outline", size: "large", width: "400", text: "sign_in_with" }
+                );
+            }
+        };
+
         function updateWelcomeMessage() {
-            document.getElementById('welcome-message').textContent = `Welcome, ${userName}!`;
-        }
-       
-        function updateActiveElements(tabName) {
-            // Reset Sidebar and Tabs
-            const navItems = document.querySelectorAll('[id^="nav-"]');
-            navItems.forEach(item => {
-                item.classList.remove('text-indigo-700', 'font-bold', 'bg-indigo-100');
-                item.classList.add('text-gray-700', 'hover:bg-gray-100');
-            });
-
-            const tabItems = document.querySelectorAll('[id^="tab-"]');
-            tabItems.forEach(item => {
-                item.classList.remove('border-indigo-500', 'text-indigo-600');
-                item.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
-            });
-           
-            // Set active Sidebar item (Exclude 'create_placeholder' from active styling)
-            if (tabName !== 'create_placeholder') {
-                const activeNavItem = document.getElementById(`nav-${tabName}`);
-                if (activeNavItem) {
-                    activeNavItem.classList.remove('text-gray-700', 'hover:bg-gray-100');
-                    activeNavItem.classList.add('text-indigo-700', 'font-bold', 'bg-indigo-100');
-                }
-            }
-
-            // Set active Tab item
-            const activeTabItem = document.getElementById(`tab-${tabName === 'create_placeholder' ? 'create' : tabName}`);
-            if (activeTabItem) {
-                activeTabItem.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
-                activeTabItem.classList.add('border-indigo-500', 'text-indigo-600');
+            document.getElementById('welcome-message').textContent = `Hi, ${userName}`;
+            const img = document.getElementById('user-profile-pic');
+            if(userPicture) {
+                img.src = userPicture;
+                img.classList.remove('hidden');
+            } else {
+                img.classList.add('hidden');
             }
         }
-       
-        // 1. Screen Switching Logic
+
         function showScreen(screenName) {
             const screens = {
                 'home': document.getElementById('main-home-screen'),
@@ -439,238 +237,19 @@
             };
 
             Object.values(screens).forEach(screen => {
-                screen.classList.add('hidden');
+                if(screen) screen.classList.add('hidden');
             });
 
             if (screens[screenName]) {
                 screens[screenName].classList.remove('hidden');
             }
-           
+            
             if (screenName === 'dashboard') {
                 updateWelcomeMessage();
-                setDashboardContent(activeTab);
+            } else if (screenName === 'home') {
+                userName = 'Guest';
+                userPicture = '';
             }
-
-            if (screenName === 'join') {
-                document.getElementById('game-pin').focus();
-            } else {
-                hideModal();
-                hideCreateQuizModal();
-            }
-        }
-
-
-        // 2. DASHBOARD CONTENT MANAGEMENT
-        function setDashboardContent(contentName) {
-           
-            // Special case: If user clicks 'Create', show the modal
-            if (contentName === 'create') {
-                showCreateQuizModal();
-                // Keep the activeTab as whatever it was previously, or default to 'create_placeholder'
-                // This prevents the main dashboard area from changing when the modal opens.
-                updateActiveElements(activeTab);
-                return;
-            }
-           
-            activeTab = contentName;
-            updateActiveElements(contentName);
-
-            const contentDiv = document.getElementById('dashboard-content');
-            let htmlContent = '';
-           
-            // Dynamic content generation based on menu item
-            switch (contentName) {
-                 case 'create_placeholder':
-                    // This is the default view when on the 'Create Quiz' tab but the modal is closed
-                     htmlContent = `
-                        <h3 class="text-3xl font-bold text-indigo-700">Ready to Build! 🚀</h3>
-                        <p class="mt-4 text-lg">Click the button below to choose your creation method.</p>
-                        <div class="mt-8 flex justify-center space-x-6">
-                            <div onclick="showCreateQuizModal()" class="cursor-pointer p-6 w-52 bg-green-50 border-2 border-green-300 rounded-xl shadow-lg hover:shadow-xl transition duration-200 transform hover:scale-[1.03]">
-                                <p class="text-4xl">➕</p>
-                                <p class="mt-3 text-lg font-semibold text-green-700">Start New Quiz</p>
-                            </div>
-                            <div onclick="setDashboardContent('run')" class="cursor-pointer p-6 w-52 bg-blue-50 border-2 border-blue-300 rounded-xl shadow-lg hover:shadow-xl transition duration-200 transform hover:scale-[1.03]">
-                                <p class="text-4xl">▶️</p>
-                                <p class="mt-3 text-lg font-semibold text-blue-700">Start Live Game</p>
-                            </div>
-                        </div>
-                    `;
-                    break;
-                case 'edit':
-                    htmlContent = `
-                        <h3 class="text-3xl font-bold text-indigo-700 mb-6">🛠️ Edit & Manage Quizzes</h3>
-                        <p class="text-lg text-gray-600 mb-8">Select a quiz from your list to modify, duplicate, or delete.</p>
-                        <div class="p-4 bg-gray-50 border border-gray-200 rounded-lg text-left">
-                            <p class="font-medium text-gray-700">Quiz List Placeholder:</p>
-                            <ul class="list-disc list-inside mt-2 text-gray-500">
-                                <li>The History of Tailwind CSS (20 Qs)</li>
-                                <li>Introduction to JavaScript (15 Qs)</li>
-                                <li>My Draft Quiz (5 Qs)</li>
-                            </ul>
-                        </div>
-                    `;
-                    break;
-                case 'run':
-                    htmlContent = `
-                        <h3 class="text-3xl font-bold text-indigo-700 mb-6">▶️ Run a Live Game</h3>
-                        <p class="text-lg text-gray-600 mb-8">Choose a quiz and generate a **Game Pin** for players to join.</p>
-                        <button class="bg-red-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-red-700 transition duration-200">Host Game</button>
-                    `;
-                    break;
-                case 'leaderboard':
-                    htmlContent = `
-                        <h3 class="text-3xl font-bold text-indigo-700 mb-6">🏆 Global Leaderboard</h3>
-                        <p class="text-lg text-gray-600 mb-8">See who's the top QuizMaster!</p>
-                    `;
-                    break;
-                case 'settings':
-                    htmlContent = `
-                        <h3 class="text-3xl font-bold text-indigo-700 mb-6">⚙️ Account Settings</h3>
-                        <p class="text-lg text-gray-600 mb-8">Manage your profile and preferences.</p>
-                    `;
-                    break;
-                default:
-                    // Fallback to the initial dashboard content
-                     htmlContent = `
-                        <h3 class="text-3xl font-bold text-indigo-700">Welcome to the Dashboard!</h3>
-                        <p class="mt-4 text-lg">Select an option from the menu to get started.</p>
-                    `;
-            }
-           
-            contentDiv.innerHTML = htmlContent;
-        }
-
-        // 3. CREATE QUIZ MODAL LOGIC
-        function showCreateQuizModal() {
-            const modal = document.getElementById('create-quiz-modal');
-            const content = document.getElementById('create-modal-content');
-            modal.classList.remove('hidden');
-           
-            // Set the 'Create Quiz' tab/nav item as visually active when the modal opens
-            updateActiveElements('create');
-           
-            // Trigger transition for pop-in effect
-            setTimeout(() => {
-                modal.classList.add('opacity-100');
-                content.classList.remove('scale-95', 'opacity-0');
-                content.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
-
-        function hideCreateQuizModal() {
-            const modal = document.getElementById('create-quiz-modal');
-            const content = document.getElementById('create-modal-content');
-           
-            if (modal && !modal.classList.contains('hidden')) {
-                // Trigger transition for pop-out effect
-                content.classList.remove('scale-100', 'opacity-100');
-                content.classList.add('scale-95', 'opacity-0');
-               
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('opacity-100');
-                    // Ensure the background dashboard content for 'Create' is displayed
-                    setDashboardContent('create_placeholder');
-                }, 300); // Match transition duration
-            }
-        }
-       
-        // 4. QUIZ CREATION CARD HANDLERS
-        function startFromPDF() {
-            hideCreateQuizModal();
-            alert("Feature Activated: Starting Quiz creation from PDF upload. (Next step: Upload form)");
-        }
-       
-        function startWithAIGenerator() {
-            hideCreateQuizModal();
-            alert("Feature Activated: Starting Quiz creation with AI Generator. (Next step: Topic input form)");
-        }
-       
-        function startBlank() {
-            hideCreateQuizModal();
-            alert("Feature Activated: Starting Quiz creation from a Blank Canvas. (Next step: Quiz Editor page)");
-        }
-       
-        // (Removed importSlides and useTemplates functions)
-
-        // 5. OTHER MODAL/AUTH LOGIC (Kept/Minor updates)
-       
-        function showModal() {
-            const modal = document.getElementById('nickname-modal');
-            const content = document.getElementById('modal-content');
-            modal.classList.remove('hidden');
-           
-            setTimeout(() => {
-                modal.classList.add('opacity-100');
-                content.classList.remove('scale-95', 'opacity-0');
-                content.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
-
-        function hideModal() {
-            const modal = document.getElementById('nickname-modal');
-            const content = document.getElementById('modal-content');
-           
-            if (modal && !modal.classList.contains('hidden')) {
-                content.classList.remove('scale-100', 'opacity-100');
-                content.classList.add('scale-95', 'opacity-0');
-               
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('opacity-100');
-                }, 300);
-            }
-        }
-
-        function handleGamePinSubmission(event) {
-            event.preventDefault();
-           
-            const gamePinInput = document.getElementById('game-pin');
-            const gamePin = gamePinInput.value;
-           
-            if (gamePin.length === 6 && /^\d+$/.test(gamePin)) {
-                showModal();
-            } else {
-                alert("Please enter a valid 6-digit Game Pin.");
-            }
-        }
-
-        function selectAvatar(avatarId) {
-            const avatars = document.querySelectorAll('[id^="avatar-"]');
-            avatars.forEach(avatar => {
-                avatar.classList.remove('border-indigo-600', 'border-4');
-                avatar.classList.add('border-transparent');
-            });
-
-            const selectedElement = document.getElementById(`avatar-${avatarId}`);
-            selectedElement.classList.remove('border-transparent', 'hover:border-indigo-400');
-            selectedElement.classList.add('border-indigo-600', 'border-4');
-
-            currentAvatar = avatarId;
-            document.getElementById('selected-avatar').value = avatarId;
-            document.getElementById('avatar-error').classList.add('hidden');
-        }
-
-        document.querySelector('#nickname-modal form').addEventListener('submit', function(event) {
-            event.preventDefault();
-           
-            const nickname = document.getElementById('nickname').value.trim();
-            const selectedAvatar = document.getElementById('selected-avatar').value;
-
-            if (!selectedAvatar) {
-                document.getElementById('avatar-error').classList.remove('hidden');
-                return;
-            }
-
-            if (nickname && selectedAvatar) {
-                alert(`Joining quiz with Nickname: ${nickname} and Avatar: ${selectedAvatar}`);
-                hideModal();
-            }
-        });
-       
-        function handleGoogleSignIn() {
-            alert("Google Sign-In initiated. (Placeholder)");
         }
 
         function handleAuthFormSubmission(event) {
@@ -685,13 +264,99 @@
             showScreen('dashboard');
         }
 
-        // Initialize screen state on load
-        document.addEventListener('DOMContentLoaded', () => {
-            // Set initial state for 'create' content
-            activeTab = 'create_placeholder';
-            showScreen('home');
-        });
+        // --- CREATOR LOGIC ---
 
+        function showCreateQuizModal() {
+            document.getElementById('create-quiz-modal').classList.remove('hidden');
+            const container = document.getElementById('questions-container');
+            if(container.children.length === 0) {
+                addQuestionCard();
+            }
+        }
+
+        function hideCreateQuizModal() {
+            if(confirm("Are you sure? Unsaved changes will be lost.")) {
+                document.getElementById('create-quiz-modal').classList.add('hidden');
+                document.getElementById('questions-container').innerHTML = '';
+                document.getElementById('quiz-title-input').value = '';
+                questionCount = 0;
+            }
+        }
+
+        function addQuestionCard() {
+            questionCount++;
+            const container = document.getElementById('questions-container');
+            const cardId = `q-card-${questionCount}`;
+            
+            const html = `
+                <div id="${cardId}" class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 transition hover:shadow-md">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Question ${questionCount}</span>
+                        <button onclick="removeQuestion('${cardId}')" class="text-red-400 hover:text-red-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mb-4 md:mb-6">
+                        <input type="text" class="w-full text-base md:text-lg font-medium border-b-2 border-gray-200 focus:border-indigo-500 outline-none py-2 transition" placeholder="Type your question here...">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                        <div class="flex items-center bg-red-50 p-2 rounded-lg border border-transparent focus-within:border-red-500">
+                            <input type="radio" name="correct-${questionCount}" class="w-4 h-4 text-red-600 mt-1 cursor-pointer shrink-0">
+                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700" placeholder="Answer 1">
+                        </div>
+                        <div class="flex items-center bg-blue-50 p-2 rounded-lg border border-transparent focus-within:border-blue-500">
+                            <input type="radio" name="correct-${questionCount}" class="w-4 h-4 text-blue-600 mt-1 cursor-pointer shrink-0">
+                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700" placeholder="Answer 2">
+                        </div>
+                        <div class="flex items-center bg-yellow-50 p-2 rounded-lg border border-transparent focus-within:border-yellow-500">
+                            <input type="radio" name="correct-${questionCount}" class="w-4 h-4 text-yellow-600 mt-1 cursor-pointer shrink-0">
+                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700" placeholder="Answer 3">
+                        </div>
+                        <div class="flex items-center bg-green-50 p-2 rounded-lg border border-transparent focus-within:border-green-500">
+                            <input type="radio" name="correct-${questionCount}" class="w-4 h-4 text-green-600 mt-1 cursor-pointer shrink-0">
+                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700" placeholder="Answer 4">
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            container.appendChild(div.firstElementChild);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function removeQuestion(id) {
+            const el = document.getElementById(id);
+            if(el) el.remove();
+        }
+
+        function saveQuiz() {
+            const title = document.getElementById('quiz-title-input').value;
+            if(!title) {
+                alert("Please give your quiz a title!");
+                return;
+            }
+            alert(`Quiz "${title}" saved successfully!`);
+            document.getElementById('create-quiz-modal').classList.add('hidden');
+            
+            const dbContent = document.getElementById('dashboard-content');
+            dbContent.innerHTML = `
+                <div class="bg-white p-6 rounded-lg shadow border border-gray-200 text-left">
+                    <h3 class="font-bold text-xl text-indigo-700">${title}</h3>
+                    <p class="text-gray-500 text-sm mt-1">${document.getElementById('questions-container').children.length} Questions</p>
+                    <div class="mt-4 flex space-x-2">
+                        <button class="bg-indigo-600 text-white px-4 py-1 rounded text-sm">Play</button>
+                        <button onclick="showCreateQuizModal()" class="bg-gray-200 text-gray-700 px-4 py-1 rounded text-sm">Edit</button>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <button onclick="showCreateQuizModal()" class="bg-indigo-600 text-white py-2 px-6 rounded-lg font-bold hover:bg-indigo-700 transition shadow-md">Create Another</button>
+                </div>
+            `;
+        }
     </script>
   </body>
 </html>
