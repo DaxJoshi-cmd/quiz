@@ -1,391 +1,624 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <meta name="description" content="Gardi Quiz - The ultimate platform for students and teachers.">
+    <!-- Fixed: Switched to standard Tailwind CDN to resolve 'tailwind not defined' error -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-      /* Custom CSS for modal overlay */
-      .modal-overlay {
-        background-color: rgba(0, 0, 0, 0.75); 
-        backdrop-filter: blur(4px); 
+      .modal-overlay { background-color: rgba(17, 24, 39, 0.85); backdrop-filter: blur(4px); }
+      .custom-scroll::-webkit-scrollbar { width: 6px; }
+      .custom-scroll::-webkit-scrollbar-track { background: #f3f4f6; }
+      .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+      
+      /* Subtle moving background animation */
+      @keyframes gradient-xy {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
       }
-      /* Custom scrollbar */
-      .custom-scroll::-webkit-scrollbar {
-        width: 8px;
-      }
-      .custom-scroll::-webkit-scrollbar-track {
-        background: #f1f1f1; 
-      }
-      .custom-scroll::-webkit-scrollbar-thumb {
-        background: #888; 
-        border-radius: 4px;
-      }
-      /* Hide scrollbar for clean mobile look but keep functionality */
-      .no-scrollbar::-webkit-scrollbar {
-          display: none;
-      }
-      .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+      .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient-xy 15s ease infinite;
       }
     </style>
     <script>
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: { sans: ['Inter', 'sans-serif'] },
-            colors: {
-                kahoot: { 'main': '#341d5b', 'accent': '#9b47ff' }
-            }
+            fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+            colors: { brand: { 'dark': '#341d5b', 'main': '#4f46e5' } }
           }
         }
       }
     </script>
-    <title>GARDI QU!Z</title>
+    <title>GARDI QU!Z | Authentic Learning</title>
   </head>
-  <body class="bg-gray-50 font-sans">
+  <body class="bg-gray-50 font-sans text-gray-800">
 
-    <div id="main-home-screen">
-      <header class="text-gray-600 body-font bg-white shadow-md sticky top-0 z-50">
+    <!-- HOME SCREEN -->
+    <div id="main-home-screen" class="flex flex-col min-h-screen">
+      <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100">
         <div class="container mx-auto flex flex-wrap p-4 flex-row items-center justify-between">
-          <a class="flex title-font font-medium items-center text-gray-900">
-            <span class="ml-2 text-xl md:text-2xl font-extrabold text-indigo-700">GARDI QU!Z</span>
+          <a class="flex flex-col md:flex-row items-start md:items-center gap-1 cursor-pointer" onclick="location.reload()">
+            <span class="text-2xl font-black tracking-tighter text-indigo-700">GARDI QU!Z</span>
           </a>
-          <button onclick="showScreen('join')" class="inline-flex items-center bg-indigo-600 text-white border-0 py-2 px-4 focus:outline-none hover:bg-indigo-700 rounded-lg text-base font-semibold shadow-md">
-            JOIN
+          <button onclick="showScreen('join')" class="inline-flex items-center bg-gray-900 text-white border-0 py-2 px-6 hover:bg-gray-800 rounded-full text-sm font-bold shadow-lg transition transform hover:-translate-y-0.5">
+            ENTER PIN
           </button>
         </div>
       </header>
      
-      <main class="min-h-[calc(100vh-80px)] flex items-center justify-center p-4 bg-gray-50">
-        <div class="w-full max-w-lg bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-gray-100">
-            <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-2">Welcome!</h2>
-            <p class="text-center text-gray-500 mb-8">Sign in to create & play quizzes.</p>
-
-            <div class="space-y-4">
-                <div id="google-signin-button" class="w-full flex justify-center"></div>
-
-                <div class="relative flex items-center justify-center">
-                    <div class="w-full border-t border-gray-300"></div>
-                    <div class="absolute bg-white px-3 text-sm text-gray-500 font-medium">OR</div>
-                </div>
-
-                <form onsubmit="handleAuthFormSubmission(event)">
-                    <div class="space-y-4">
-                        <input id="email" name="email" type="email" required placeholder="Email address" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition" />
-                        <input id="password" name="password" type="password" required placeholder="Password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition" />
-                        <button type="submit" class="w-full py-3 px-4 rounded-lg shadow-md text-lg font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition">
-                            Sign In
-                        </button>
-                    </div>
-                </form>
+      <!-- ENHANCED BACKGROUND -->
+      <main class="flex-grow flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600 animate-gradient">
+        <!-- Texture Overlay -->
+        <div class="absolute inset-0 z-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/cubes.png');"></div>
+        
+        <!-- Login Card -->
+        <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl border border-gray-100 relative z-10 animate-fade-in transition-all duration-300" id="auth-card">
+            
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-black text-gray-900 mb-2" id="auth-title">Welcome Back!</h2>
+                <p class="text-sm text-gray-500" id="auth-subtitle">Log in to manage your quizzes and reports.</p>
             </div>
             
-            <button onclick="handleGuestLogin()" class="mt-6 w-full py-3 px-4 rounded-lg shadow-md text-lg font-bold text-white bg-pink-500 hover:bg-pink-600 transition">
-                Continue as Guest
-            </button>
+            <!-- Custom Google Button (Visible in both Login and Signup) -->
+            <div id="google-login-container">
+                <button onclick="handleGoogleLogin()" class="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-lg py-3 hover:bg-gray-50 transition shadow-sm text-sm font-bold text-gray-700 mb-4 active:scale-95">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    <span id="google-btn-text">Sign in with Google</span>
+                </button>
+
+                <div class="relative flex items-center justify-center py-2 mb-4">
+                    <div class="w-full border-t border-gray-200"></div>
+                    <div class="absolute bg-white px-3 text-xs text-gray-400 font-medium uppercase tracking-wider">Or</div>
+                </div>
+            </div>
+
+            <!-- Auth Form -->
+            <form onsubmit="handleAuthFormSubmission(event)" id="auth-form">
+                <div class="space-y-4">
+                    <div id="error-message" class="hidden text-red-500 text-xs text-center font-semibold bg-red-50 p-2 rounded border border-red-200"></div>
+                    
+                    <input id="username" type="text" required placeholder="Username" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 text-sm transition" />
+                    
+                    <input id="password" type="password" required placeholder="Password" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 text-sm transition" />
+                    
+                    <button type="submit" id="submit-btn" class="w-full py-3 px-4 rounded-lg shadow-md text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition transform hover:scale-[1.01]">Log In</button>
+                </div>
+            </form>
+            
+            <button onclick="handleGuestLogin()" class="mt-4 w-full py-2 px-4 rounded-lg border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition">Continue as Guest</button>
+
+            <!-- Toggle Sign Up / Login -->
+            <div class="mt-6 text-center pt-4 border-t border-gray-100">
+                <p class="text-sm text-gray-500" id="toggle-text">New user?</p>
+                <button onclick="toggleAuthMode()" id="toggle-btn" class="text-indigo-600 font-bold hover:underline text-sm mt-1">Create an Account</button>
+            </div>
         </div>
       </main>
     </div>
 
+    <!-- DASHBOARD SCREEN -->
     <div id="dashboard-screen" class="min-h-screen bg-gray-100 hidden flex flex-col">
-        <header class="bg-white shadow-md p-4 flex justify-between items-center z-10 sticky top-0">
-            <h1 class="text-xl md:text-3xl font-extrabold text-indigo-700 truncate">DASHBOARD</h1>
-            <div class="flex items-center space-x-2 md:space-x-4">
-                <img id="user-profile-pic" src="" class="w-8 h-8 rounded-full hidden border border-gray-300">
-                <span id="welcome-message" class="text-gray-600 font-medium text-sm md:text-base truncate max-w-[100px] md:max-w-none">Welcome!</span>
-                <button onclick="showScreen('home')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">Logout</button>
+        <header class="bg-white shadow-sm p-4 flex justify-between items-center z-10 sticky top-0 border-b border-gray-200">
+            <div class="flex items-center gap-2">
+                <div class="bg-indigo-600 text-white p-1.5 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z" /></svg>
+                </div>
+                <h1 class="text-xl font-bold text-gray-800 tracking-tight" id="header-title">Library</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="text-right hidden sm:block">
+                    <span id="welcome-message" class="block text-gray-800 font-bold text-sm">Welcome!</span>
+                </div>
+                <!-- Profile Picture -->
+                <img id="user-profile-pic" src="" alt="Profile" class="w-10 h-10 rounded-full border-2 border-indigo-100 object-cover bg-gray-200">
+                
+                <button onclick="showScreen('home')" class="text-gray-400 hover:text-red-500 transition" title="Logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                </button>
             </div>
         </header>
 
         <div class="flex flex-1 overflow-hidden relative">
-            <nav class="w-64 bg-white shadow-md p-4 space-y-2 hidden md:block z-0 h-full">
-                <div class="mb-6">
-                    <button onclick="showCreateQuizModal()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition shadow-md">+ Create Quiz</button>
-                </div>
-                <h3 class="text-xs font-semibold uppercase text-gray-400 mb-2">Menu</h3>
-                <a href="#" class="block p-3 rounded-lg text-gray-700 bg-gray-100 font-semibold">My Library</a>
-                <a href="#" class="block p-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">Reports</a>
+            <!-- Sidebar -->
+            <nav class="w-64 bg-white border-r border-gray-200 p-4 space-y-1 hidden md:block z-0 h-full">
+                <button onclick="showCreateQuizModal()" class="w-full bg-indigo-600 text-white py-2.5 px-4 rounded-lg font-bold hover:bg-indigo-700 transition shadow-sm mb-6 flex items-center justify-center gap-2">
+                    <span>+</span> Create Quiz
+                </button>
+                
+                <button onclick="switchView('library')" id="nav-library" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg bg-indigo-50 text-indigo-700 font-medium text-sm transition">
+                    <svg class="h-5 w-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                    My Library
+                </button>
+                <button onclick="switchView('reports')" id="nav-reports" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-50 transition text-sm font-medium">
+                    <svg class="h-5 w-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                    Reports
+                </button>
             </nav>
             
-            <main class="flex-1 p-4 md:p-6 overflow-y-auto pb-24 md:pb-6">
-                
+            <main class="flex-1 p-4 md:p-8 overflow-y-auto bg-gray-50 relative">
+                <!-- Mobile Create Button -->
                 <div class="md:hidden mb-6">
-                    <button onclick="showCreateQuizModal()" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold shadow-lg flex items-center justify-center space-x-2">
-                        <span class="text-2xl">+</span> <span>Create New Quiz</span>
-                    </button>
+                    <button onclick="showCreateQuizModal()" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold shadow-lg">+ Create New Quiz</button>
                 </div>
 
-                <div id="dashboard-content" class="text-center mt-4 md:mt-10">
-                    <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-4">Your Quiz Library</h2>
-                    <div id="empty-state" class="p-8 md:p-10 border-4 border-dashed border-gray-300 rounded-xl bg-white text-gray-400 flex flex-col items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                        <p>No quizzes yet.</p> 
-                        <p class="text-sm">Tap the button above to create one!</p>
-                    </div>
-                    <div id="quiz-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 hidden">
+                <!-- VIEW: LIBRARY -->
+                <div id="view-library" class="max-w-5xl mx-auto animate-fade-in">
+                    <div id="quiz-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 hidden"></div>
+
+                    <!-- Empty State for Library -->
+                    <div id="library-empty-state" class="flex flex-col items-center">
+                        <div class="w-full p-8 md:p-12 border-2 border-dashed border-gray-300 rounded-2xl bg-white text-gray-500 flex flex-col items-center text-center">
+                            <div class="bg-gray-50 p-4 rounded-full mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">No quizzes yet</h3> 
+                            <p class="text-sm mb-6">Create your own from scratch.</p>
+                            <button onclick="showCreateQuizModal()" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">Create from Scratch</button>
                         </div>
+                    </div>
                 </div>
+
+                <!-- VIEW: REPORTS -->
+                <div id="view-reports" class="hidden max-w-5xl mx-auto animate-fade-in">
+                    <!-- Reports List Container -->
+                    <div id="reports-list-container">
+                        <!-- Content injected via JS -->
+                    </div>
+
+                    <!-- Detailed Report Modal (Inside view for simplicity) -->
+                    <div id="report-detail-view" class="hidden bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                        <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                            <div>
+                                <button onclick="closeReportDetail()" class="text-xs font-bold text-gray-500 hover:text-indigo-600 flex items-center gap-1 mb-1">
+                                    ← Back to Reports
+                                </button>
+                                <h2 class="text-xl font-black text-gray-800" id="detail-title">Game Report</h2>
+                                <p class="text-xs text-gray-500" id="detail-date">Date played</p>
+                            </div>
+                            <div class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold" id="detail-players-count">0 Players</div>
+                        </div>
+                        <div class="p-0 overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider border-b border-gray-200">
+                                        <th class="px-6 py-3 font-semibold">Rank</th>
+                                        <th class="px-6 py-3 font-semibold">Player</th>
+                                        <th class="px-6 py-3 font-semibold text-right">Score</th>
+                                        <th class="px-6 py-3 font-semibold text-right">Accuracy</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detail-rows" class="text-sm text-gray-700">
+                                    <!-- Rows injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </main>
         </div>
     </div>
 
-    <div id="create-quiz-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay">
-        <div class="w-full md:max-w-6xl h-full md:h-[90vh] bg-gray-50 md:rounded-2xl shadow-2xl flex flex-col overflow-hidden md:m-4 transition-all" id="create-modal-content">
-             
-             <div class="bg-white px-4 py-3 md:px-6 md:py-4 border-b flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 shadow-sm z-20">
-                 <div class="flex-1 w-full sm:w-auto">
-                     <input type="text" id="quiz-title-input" placeholder="Enter Quiz Title..." class="text-xl md:text-2xl font-extrabold text-gray-800 placeholder-gray-400 border-none focus:ring-0 w-full bg-transparent p-0">
-                 </div>
-                 <div class="flex space-x-3 w-full sm:w-auto justify-end">
-                     <button onclick="hideCreateQuizModal()" class="flex-1 sm:flex-none py-2 px-4 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium text-sm">Cancel</button>
-                     <button onclick="saveQuiz()" class="flex-1 sm:flex-none py-2 px-6 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 shadow-md text-sm">Save</button>
+    <!-- CREATE QUIZ MODAL -->
+    <div id="create-quiz-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+        <div class="w-full max-w-4xl h-[90vh] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in">
+             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                 <input type="text" id="quiz-title-input" placeholder="Enter Quiz Title" class="text-xl font-bold bg-transparent border-none focus:ring-0 w-full placeholder-gray-400">
+                 <div class="flex gap-3">
+                     <button onclick="hideCreateQuizModal()" class="px-4 py-2 text-gray-600 font-medium hover:bg-gray-200 rounded-lg text-sm">Cancel</button>
+                     <button onclick="saveQuiz()" class="px-6 py-2 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700 text-sm">Save</button>
                  </div>
              </div>
-
-             <div class="flex flex-1 overflow-hidden relative">
-                <div class="flex-1 p-4 md:p-6 overflow-y-auto custom-scroll bg-gray-100 relative w-full">
-                    
-                    <div id="questions-container" class="space-y-4 md:space-y-6 pb-28 md:pb-20 max-w-5xl mx-auto">
-                        </div>
-
-                    <div class="fixed bottom-6 right-6 md:absolute md:bottom-8 md:right-8 z-30">
-                        <button onclick="addQuestionCard()" class="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 active:scale-95 transition transform border-2 border-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
+             <div class="flex-1 p-6 overflow-y-auto bg-gray-100" id="create-modal-body">
+                <div id="questions-container" class="space-y-4"></div>
+                <button onclick="addQuestionCard()" class="mt-4 w-full py-3 border-2 border-dashed border-gray-300 text-gray-500 font-bold rounded-xl hover:border-indigo-500 hover:text-indigo-600 transition">+ Add Question</button>
              </div>
         </div>
     </div>
 
-    <div id="join-quiz-screen" class="hidden min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-         <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md text-center">
-             <h2 class="text-3xl font-bold mb-6 text-indigo-700">Join Quiz</h2>
-             <input type="text" placeholder="Enter Game PIN" class="w-full text-center text-2xl tracking-widest border-2 border-gray-300 rounded-lg py-3 mb-4 focus:border-indigo-600 focus:outline-none font-bold uppercase">
-             <button class="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg text-lg hover:bg-indigo-700 transition mb-4">Enter</button>
-             <button onclick="showScreen('home')" class="text-gray-500 hover:text-gray-800 text-sm">Back to Home</button>
+    <!-- JOIN QUIZ SCREEN -->
+    <div id="join-quiz-screen" class="hidden min-h-screen flex flex-col items-center justify-center bg-indigo-600 p-4 relative overflow-hidden">
+         <!-- BG Effects -->
+         <div class="absolute inset-0 bg-gradient-to-br from-indigo-700 to-purple-800"></div>
+         <div class="absolute top-0 left-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+         
+         <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center relative z-10 animate-fade-in">
+             <h2 class="text-2xl font-black text-indigo-700 mb-6 tracking-wide">JOIN GAME</h2>
+             <input type="text" placeholder="GAME PIN" class="w-full text-center text-3xl font-bold border-2 border-gray-200 rounded-lg py-3 mb-4 focus:border-indigo-600 outline-none uppercase placeholder-gray-300">
+             <button class="w-full bg-gray-900 text-white font-bold py-3 rounded-lg hover:bg-black transition mb-4">Enter</button>
+             <button onclick="showScreen('home')" class="text-gray-500 hover:text-gray-800 text-sm">Back</button>
          </div>
     </div>
 
     <script>
-        // GOOGLE CLIENT ID
-        const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID_HERE.apps.googleusercontent.com"; 
+        // --- DATA STATE ---
+        const DEFAULT_CAR_PFP = "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80";
+        const GOOGLE_PFP = "https://lh3.googleusercontent.com/a/default-user=s96-c";
 
         let userName = 'Guest';
-        let userPicture = '';
+        let userPicture = DEFAULT_CAR_PFP; 
         let questionCount = 0;
+        let quizList = []; 
+        let reportHistory = []; 
 
-        // --- AUTH LOGIC ---
-        function parseJwt (token) {
-            var base64Url = token.split('.')[1];
-            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-            return JSON.parse(jsonPayload);
-        }
-
-        function handleCredentialResponse(response) {
-            try {
-                const responsePayload = parseJwt(response.credential);
-                userName = responsePayload.given_name || responsePayload.name;
-                userPicture = responsePayload.picture;
-                showScreen('dashboard');
-            } catch (e) {
-                console.error("Error decoding JWT", e);
-            }
-        }
-
-        window.onload = function () {
-            if (typeof google !== 'undefined') {
-                google.accounts.id.initialize({
-                    client_id: GOOGLE_CLIENT_ID,
-                    callback: handleCredentialResponse
-                });
-                google.accounts.id.renderButton(
-                    document.getElementById("google-signin-button"),
-                    { theme: "outline", size: "large", width: "100%", text: "sign_in_with" }
-                );
-            }
+        // --- AUTH STATE & LOGIC ---
+        let authMode = 'login'; // 'login' or 'signup'
+        
+        // Initialize Sim Database from LocalStorage
+        const getUsers = () => JSON.parse(localStorage.getItem('gardi_users') || '[]');
+        const saveUser = (user) => {
+            const users = getUsers();
+            users.push(user);
+            localStorage.setItem('gardi_users', JSON.stringify(users));
         };
+        const findUser = (username) => getUsers().find(u => u.username.toLowerCase() === username.toLowerCase());
 
-        // --- NAVIGATION LOGIC ---
-        function updateWelcomeMessage() {
-            document.getElementById('welcome-message').textContent = `Hi, ${userName}`;
-            const img = document.getElementById('user-profile-pic');
-            if(userPicture) {
-                img.src = userPicture;
-                img.classList.remove('hidden');
-            } else {
-                img.classList.add('hidden');
-            }
-        }
-
-        function showScreen(screenName) {
-            const screens = {
-                'home': document.getElementById('main-home-screen'),
-                'join': document.getElementById('join-quiz-screen'),
-                'dashboard': document.getElementById('dashboard-screen')
-            };
-
-            Object.values(screens).forEach(screen => {
-                if(screen) screen.classList.add('hidden');
-            });
-
-            if (screens[screenName]) {
-                screens[screenName].classList.remove('hidden');
-            }
+        function toggleAuthMode() {
+            authMode = authMode === 'login' ? 'signup' : 'login';
             
-            if (screenName === 'dashboard') {
-                updateWelcomeMessage();
-            } else if (screenName === 'home') {
-                userName = 'Guest';
-                userPicture = '';
+            const title = document.getElementById('auth-title');
+            const subtitle = document.getElementById('auth-subtitle');
+            const submitBtn = document.getElementById('submit-btn');
+            const toggleText = document.getElementById('toggle-text');
+            const toggleBtn = document.getElementById('toggle-btn');
+            const googleContainer = document.getElementById('google-login-container');
+            const googleBtnText = document.getElementById('google-btn-text'); // Get the text span
+            const errorMsg = document.getElementById('error-message');
+            
+            errorMsg.classList.add('hidden'); // Clear errors
+
+            if(authMode === 'signup') {
+                title.innerText = "Create Account";
+                subtitle.innerText = "Join to save your progress!";
+                submitBtn.innerText = "Sign Up";
+                toggleText.innerText = "Already have an account?";
+                toggleBtn.innerText = "Log In here";
+                googleBtnText.innerText = "Sign up with Google"; // Update text
+            } else {
+                title.innerText = "Welcome Back!";
+                subtitle.innerText = "Log in to manage your quizzes.";
+                submitBtn.innerText = "Log In";
+                toggleText.innerText = "New user?";
+                toggleBtn.innerText = "Create an Account";
+                googleBtnText.innerText = "Sign in with Google"; // Update text
             }
         }
 
-        function handleAuthFormSubmission(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            userName = email.split('@')[0];
+        function handleGoogleLogin() {
+            const btnText = document.getElementById('google-btn-text');
+            const originalText = btnText.innerText;
+            btnText.innerText = "Connecting...";
+            
+            setTimeout(() => {
+                userName = "Google User";
+                userPicture = GOOGLE_PFP;
+                showScreen('dashboard');
+                btnText.innerText = originalText;
+            }, 800);
+        }
+
+        function handleAuthFormSubmission(e) {
+            e.preventDefault();
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value.trim();
+            const btn = document.getElementById('submit-btn');
+            const errorMsg = document.getElementById('error-message');
+            
+            errorMsg.classList.add('hidden');
+            
+            if(!usernameInput || !passwordInput) {
+                showError("Please fill in all fields.");
+                return;
+            }
+
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                if(authMode === 'signup') {
+                    // SIGN UP LOGIC
+                    if(findUser(usernameInput)) {
+                        showError("Username already exists! Try logging in.");
+                    } else {
+                        saveUser({ username: usernameInput, password: passwordInput });
+                        loginSuccess(usernameInput);
+                    }
+                } else {
+                    // LOGIN LOGIC
+                    const user = findUser(usernameInput);
+                    // NEW CHECK ADDED HERE
+                    if (!user) {
+                         showError("Account not found! Please create a new account.");
+                    } else if (user.password === passwordInput) {
+                        loginSuccess(user.username);
+                    } else {
+                        showError("Invalid Username or Password.");
+                    }
+                }
+                btn.innerText = authMode === 'signup' ? "Sign Up" : "Log In";
+                btn.disabled = false;
+            }, 800);
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('error-message');
+            el.innerText = msg;
+            el.classList.remove('hidden');
+        }
+
+        function loginSuccess(name) {
+            // Capitalize
+            userName = name.charAt(0).toUpperCase() + name.slice(1);
+            userPicture = DEFAULT_CAR_PFP;
             showScreen('dashboard');
         }
 
         function handleGuestLogin() {
             userName = 'Guest';
+            userPicture = DEFAULT_CAR_PFP; 
             showScreen('dashboard');
         }
 
-        // --- QUIZ CREATOR LOGIC ---
+        // --- NAV & UI ---
+        function showScreen(screenName) {
+            ['main-home-screen', 'join-quiz-screen', 'dashboard-screen'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            
+            const map = { 'home': 'main-home-screen', 'join': 'join-quiz-screen', 'dashboard': 'dashboard-screen' };
+            const target = document.getElementById(map[screenName]);
+            if(target) target.classList.remove('hidden');
 
-        function showCreateQuizModal() {
-            document.getElementById('create-quiz-modal').classList.remove('hidden');
-            // If empty, add one initial question
-            const container = document.getElementById('questions-container');
-            if(container.children.length === 0) {
-                addQuestionCard();
+            if(screenName === 'dashboard') {
+                document.getElementById('welcome-message').textContent = `Hi, ${userName}`;
+                document.getElementById('user-profile-pic').src = userPicture; 
+                switchView('library'); 
+            } else if (screenName === 'home') {
+                userName = 'Guest';
+                userPicture = DEFAULT_CAR_PFP;
+                // Reset form
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                document.getElementById('error-message').classList.add('hidden');
+                // Reset to login mode if needed
+                if(authMode === 'signup') toggleAuthMode(); 
             }
         }
 
+        // --- DASHBOARD VIEW SWITCHER ---
+        function switchView(viewName) {
+            document.getElementById('nav-library').classList.replace(viewName === 'library' ? 'text-gray-600' : 'bg-indigo-50', viewName === 'library' ? 'bg-indigo-50' : 'text-gray-600');
+            document.getElementById('nav-library').classList.replace(viewName === 'library' ? 'bg-white' : 'text-indigo-700', viewName === 'library' ? 'text-indigo-700' : 'text-gray-600');
+            
+            document.getElementById('nav-reports').className = viewName === 'reports' 
+                ? "w-full flex items-center gap-3 px-3 py-2 rounded-lg bg-indigo-50 text-indigo-700 font-medium text-sm transition"
+                : "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-50 transition text-sm font-medium";
+
+            document.getElementById('view-library').classList.add('hidden');
+            document.getElementById('view-reports').classList.add('hidden');
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+
+            document.getElementById('header-title').textContent = viewName === 'library' ? 'Library' : 'Reports';
+
+            if(viewName === 'reports') renderReports();
+        }
+
+        // --- QUIZ CREATION ---
+        function showCreateQuizModal() {
+            document.getElementById('create-quiz-modal').classList.remove('hidden');
+            if(document.getElementById('questions-container').children.length === 0) addQuestionCard();
+        }
+
         function hideCreateQuizModal() {
-            if(confirm("Are you sure? Unsaved changes will be lost.")) {
-                document.getElementById('create-quiz-modal').classList.add('hidden');
-                document.getElementById('questions-container').innerHTML = ''; 
-                document.getElementById('quiz-title-input').value = '';
-                questionCount = 0;
-            }
+            document.getElementById('create-quiz-modal').classList.add('hidden');
+            document.getElementById('questions-container').innerHTML = '';
+            document.getElementById('quiz-title-input').value = '';
+            questionCount = 0;
         }
 
         function addQuestionCard() {
             questionCount++;
             const container = document.getElementById('questions-container');
-            
-            const cardId = `q-card-${questionCount}`;
-            
             const html = `
-                <div id="${cardId}" class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 transition hover:shadow-md">
-                    <div class="flex justify-between items-start mb-3">
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Question ${questionCount}</span>
-                        <button onclick="removeQuestion('${cardId}')" class="text-red-400 hover:text-red-600 p-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
+                <div id="q-${questionCount}" class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-xs font-bold text-gray-400">QUESTION ${questionCount}</span>
+                        <button onclick="this.parentElement.parentElement.remove()" class="text-red-400 hover:text-red-600">Delete</button>
                     </div>
-                    
-                    <div class="mb-5">
-                        <input type="text" class="w-full text-base md:text-lg font-medium border-b-2 border-gray-200 focus:border-indigo-500 outline-none py-2 transition bg-transparent" placeholder="Type your question here...">
+                    <input type="text" class="w-full border-b border-gray-300 focus:border-indigo-500 outline-none py-2 mb-4" placeholder="Type question...">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" class="bg-red-50 p-2 rounded border border-transparent focus:border-red-500 outline-none text-sm" placeholder="Answer 1">
+                        <input type="text" class="bg-blue-50 p-2 rounded border border-transparent focus:border-blue-500 outline-none text-sm" placeholder="Answer 2">
+                        <input type="text" class="bg-yellow-50 p-2 rounded border border-transparent focus:border-yellow-500 outline-none text-sm" placeholder="Answer 3">
+                        <input type="text" class="bg-green-50 p-2 rounded border border-transparent focus:border-green-500 outline-none text-sm" placeholder="Answer 4">
                     </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div class="flex items-center bg-red-50 p-2 rounded-lg border border-transparent focus-within:border-red-500 transition">
-                            <input type="radio" name="correct-${questionCount}" class="w-5 h-5 text-red-600 shrink-0">
-                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700 py-1" placeholder="Answer 1">
-                        </div>
-                        <div class="flex items-center bg-blue-50 p-2 rounded-lg border border-transparent focus-within:border-blue-500 transition">
-                            <input type="radio" name="correct-${questionCount}" class="w-5 h-5 text-blue-600 shrink-0">
-                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700 py-1" placeholder="Answer 2">
-                        </div>
-                        <div class="flex items-center bg-yellow-50 p-2 rounded-lg border border-transparent focus-within:border-yellow-500 transition">
-                            <input type="radio" name="correct-${questionCount}" class="w-5 h-5 text-yellow-600 shrink-0">
-                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700 py-1" placeholder="Answer 3">
-                        </div>
-                        <div class="flex items-center bg-green-50 p-2 rounded-lg border border-transparent focus-within:border-green-500 transition">
-                            <input type="radio" name="correct-${questionCount}" class="w-5 h-5 text-green-600 shrink-0">
-                            <input type="text" class="ml-2 w-full bg-transparent outline-none text-gray-700 py-1" placeholder="Answer 4">
-                        </div>
-                    </div>
-                </div>
-            `;
-
+                </div>`;
             const div = document.createElement('div');
             div.innerHTML = html;
             container.appendChild(div.firstElementChild);
-            
-            // Smooth scroll to the new card
-            setTimeout(() => {
-                const newCard = document.getElementById(cardId);
-                newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
-        }
-
-        function removeQuestion(id) {
-            const el = document.getElementById(id);
-            if(el) {
-                // Animate out (simple)
-                el.style.opacity = '0';
-                setTimeout(() => el.remove(), 200);
-            }
         }
 
         function saveQuiz() {
-            const title = document.getElementById('quiz-title-input').value;
-            if(!title) {
-                alert("Please give your quiz a title!");
-                return;
-            }
-
-            // Close modal
-            document.getElementById('create-quiz-modal').classList.add('hidden');
-            
-            // Update Dashboard UI
-            document.getElementById('empty-state').classList.add('hidden');
-            document.getElementById('quiz-grid').classList.remove('hidden');
-            
-            const grid = document.getElementById('quiz-grid');
+            const title = document.getElementById('quiz-title-input').value || "Untitled Quiz";
             const qCount = document.getElementById('questions-container').children.length;
             
+            const newQuiz = {
+                id: Date.now(),
+                title: title,
+                qCount: qCount,
+                date: new Date().toLocaleDateString()
+            };
+            quizList.unshift(newQuiz);
+
+            document.getElementById('library-empty-state').classList.add('hidden');
+            const grid = document.getElementById('quiz-grid');
+            grid.classList.remove('hidden');
+            
             const cardHTML = `
-                <div class="bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition">
-                    <div class="h-32 bg-indigo-100 rounded-lg mb-4 flex items-center justify-center">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition flex flex-col h-full animate-fade-in overflow-hidden">
+                    <div class="h-28 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                         <span class="text-4xl">🎓</span>
                     </div>
-                    <h3 class="font-bold text-lg text-gray-800 truncate">${title}</h3>
-                    <p class="text-gray-500 text-sm mb-4">${qCount} Questions</p>
-                    <div class="flex space-x-2">
-                        <button class="flex-1 bg-indigo-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700">Play</button>
-                        <button class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg text-sm font-semibold hover:bg-gray-200">Edit</button>
+                    <div class="p-5 flex flex-col flex-1">
+                        <h3 class="font-bold text-gray-800 truncate">${title}</h3>
+                        <p class="text-xs text-gray-500 mb-4">${qCount} Questions • Created ${newQuiz.date}</p>
+                        <button onclick="simulateHostGame(${newQuiz.id}, '${title}')" class="mt-auto w-full bg-indigo-100 text-indigo-700 py-2 rounded-lg text-sm font-bold hover:bg-indigo-200 transition">
+                            ▶ Host / Simulate
+                        </button>
                     </div>
                 </div>
             `;
-            
-            // Prepend new quiz
             const wrapper = document.createElement('div');
             wrapper.innerHTML = cardHTML;
             grid.insertBefore(wrapper.firstElementChild, grid.firstChild);
+
+            hideCreateQuizModal();
+        }
+
+        // --- REPORTS LOGIC ---
+        function simulateHostGame(quizId, quizTitle) {
+            const players = [];
+            const names = ["Alice", "Bob", "Charlie", "Dave", "Eve", "Frank", "Grace"];
+            const count = Math.floor(Math.random() * 5) + 3; // 3 to 8 players
+
+            for(let i=0; i<count; i++) {
+                players.push({
+                    name: names[i],
+                    score: Math.floor(Math.random() * 10000),
+                    accuracy: Math.floor(Math.random() * 100) + "%"
+                });
+            }
+            players.sort((a,b) => b.score - a.score);
+
+            const report = {
+                gameId: Date.now(),
+                quizId: quizId,
+                title: quizTitle,
+                date: new Date().toLocaleString(),
+                players: players
+            };
+
+            reportHistory.unshift(report);
+            alert(`Game Hosted Successfully!\nCheck the "Reports" tab.`);
+            switchView('reports'); 
+        }
+
+        function renderReports() {
+            const container = document.getElementById('reports-list-container');
+            const detailView = document.getElementById('report-detail-view');
             
-            // Reset for next time
-            document.getElementById('questions-container').innerHTML = '';
-            document.getElementById('quiz-title-input').value = '';
-            questionCount = 0;
+            container.innerHTML = '';
+            container.classList.remove('hidden');
+            detailView.classList.add('hidden');
+
+            if (quizList.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-20 text-center">
+                        <div class="bg-gray-200 p-4 rounded-full mb-4">
+                            <svg class="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">No Quizzes Found</h3>
+                        <p class="text-gray-500 mb-4">You need to create a quiz before you can see reports.</p>
+                        <button onclick="showCreateQuizModal()" class="text-indigo-600 font-bold hover:underline">Create a Quiz Now</button>
+                    </div>
+                `;
+                return;
+            }
+
+            if (reportHistory.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-20 text-center">
+                        <div class="bg-indigo-50 p-4 rounded-full mb-4">
+                            <svg class="h-10 w-10 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Not Hosted Any Game</h3>
+                        <p class="text-gray-500 mb-4">Go to your library and click "Host" on a quiz to generate data.</p>
+                        <button onclick="switchView('library')" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700">Go to Library</button>
+                    </div>
+                `;
+                return;
+            }
+
+            let listHTML = `<div class="space-y-4">`;
+            reportHistory.forEach((report, index) => {
+                listHTML += `
+                    <div onclick="openReportDetail(${index})" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-300 cursor-pointer transition flex justify-between items-center group">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-indigo-100 text-indigo-600 h-12 w-12 rounded-lg flex items-center justify-center font-bold text-lg">
+                                ${report.players.length}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-lg group-hover:text-indigo-700">${report.title}</h4>
+                                <p class="text-xs text-gray-500">${report.date}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="text-right hidden sm:block">
+                                <p class="text-xs font-bold text-gray-400 uppercase">Winner</p>
+                                <p class="text-sm font-semibold text-gray-700">🏆 ${report.players[0].name}</p>
+                            </div>
+                            <svg class="h-5 w-5 text-gray-300 group-hover:text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                        </div>
+                    </div>
+                `;
+            });
+            listHTML += `</div>`;
+            container.innerHTML = listHTML;
+        }
+
+        function openReportDetail(index) {
+            const report = reportHistory[index];
+            const container = document.getElementById('reports-list-container');
+            const detailView = document.getElementById('report-detail-view');
+
+            container.classList.add('hidden');
+            detailView.classList.remove('hidden');
+
+            document.getElementById('detail-title').textContent = report.title;
+            document.getElementById('detail-date').textContent = report.date;
+            document.getElementById('detail-players-count').textContent = `${report.players.length} Players`;
+
+            const tbody = document.getElementById('detail-rows');
+            tbody.innerHTML = '';
+            
+            report.players.forEach((player, i) => {
+                const rank = i + 1;
+                let rankBadge = `<span class="font-mono text-gray-500">#${rank}</span>`;
+                if(rank === 1) rankBadge = `🥇`;
+                if(rank === 2) rankBadge = `🥈`;
+                if(rank === 3) rankBadge = `🥉`;
+
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-gray-100 hover:bg-gray-50 transition";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">${rankBadge}</td>
+                    <td class="px-6 py-4 font-medium text-gray-900">${player.name}</td>
+                    <td class="px-6 py-4 text-right font-bold text-indigo-600">${player.score}</td>
+                    <td class="px-6 py-4 text-right text-gray-500">${player.accuracy}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function closeReportDetail() {
+            document.getElementById('reports-list-container').classList.remove('hidden');
+            document.getElementById('report-detail-view').classList.add('hidden');
         }
 
     </script>
